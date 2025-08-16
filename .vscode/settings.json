@@ -1,0 +1,8 @@
+{
+    "java.project.sourcePaths": [
+        "ATM-Simulator-System-master\\ATM-Simulator-System\\src"
+    ],
+    "java.project.referencedLibraries": [
+        "c:\\Users\\sreed\\Downloads\\ATM-Simulator-System-master\\lib\\jcalendar-1.4.jar"
+    ]
+}
