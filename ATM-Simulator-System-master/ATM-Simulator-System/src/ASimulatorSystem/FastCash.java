@@ -3,7 +3,7 @@ package ASimulatorSystem;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.sql.*;
+import java.sql.ResultSet;
 import java.util.Date;
 
 public class FastCash extends JFrame implements ActionListener {
@@ -87,7 +87,7 @@ public class FastCash extends JFrame implements ActionListener {
                 } else {
                     balance -= Integer.parseInt(rs.getString("amount"));
                 }
-            } String num = "17";
+            }
             if (ae.getSource() != b7 && balance < Integer.parseInt(amount)) {
                 JOptionPane.showMessageDialog(null, "Insuffient Balance");
                 return;

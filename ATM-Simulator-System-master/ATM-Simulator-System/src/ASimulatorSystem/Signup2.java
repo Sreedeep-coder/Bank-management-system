@@ -4,7 +4,6 @@ package ASimulatorSystem;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.sql.*;
 
 public class Signup2 extends JFrame implements ActionListener{
     
@@ -12,7 +11,7 @@ public class Signup2 extends JFrame implements ActionListener{
     JButton b;
     JRadioButton r1,r2,r3,r4;
     JTextField t1,t2,t3;
-    JComboBox c1,c2,c3,c4,c5;
+    JComboBox<String> c1,c2,c3,c4,c5;
     String formno;
     Signup2(String formno){
         
@@ -95,27 +94,27 @@ public class Signup2 extends JFrame implements ActionListener{
         
         
         String religion[] = {"Hindu","Muslim","Sikh","Christian","Other"};
-        c1 = new JComboBox(religion);
+        c1 = new JComboBox<>(religion);
         c1.setBackground(Color.WHITE);
         c1.setFont(new Font("Raleway", Font.BOLD, 14));
         
         String category[] = {"General","OBC","SC","ST","Other"};
-        c2 = new JComboBox(category);
+        c2 = new JComboBox<>(category);
         c2.setBackground(Color.WHITE);
         c2.setFont(new Font("Raleway", Font.BOLD, 14));
         
         String income[] = {"Null","<1,50,000","<2,50,000","<5,00,000","Upto 10,00,000","Above 10,00,000"};
-        c3 = new JComboBox(income);
+        c3 = new JComboBox<>(income);
         c3.setBackground(Color.WHITE);
         c3.setFont(new Font("Raleway", Font.BOLD, 14));
         
         String education[] = {"Non-Graduate","Graduate","Post-Graduate","Doctrate","Others"};
-        c4 = new JComboBox(education);
+        c4 = new JComboBox<>(education);
         c4.setBackground(Color.WHITE);
         c4.setFont(new Font("Raleway", Font.BOLD, 14));
         
         String occupation[] = {"Salaried","Self-Employmed","Business","Student","Retired","Others"};
-        c5 = new JComboBox(occupation);
+        c5 = new JComboBox<>(occupation);
         c5.setBackground(Color.WHITE);
         c5.setFont(new Font("Raleway", Font.BOLD, 14));
        
@@ -233,11 +232,11 @@ public class Signup2 extends JFrame implements ActionListener{
         }
         
         try{
-            if(t2.getText().equals("")){
+            if(t2.getText().equals("") || t1.getText().equals("") ){
                 JOptionPane.showMessageDialog(null, "Fill all the required fields");
             }else{
                 Conn c1 = new Conn();
-                String q1 = "insert into signup2 values('"+formno+"','"+religion+"','"+category+"','"+income+"','"+education+"','"+occupation+"','"+pan+"','"+aadhar+"','"+scitizen+"','"+eaccount+"')";
+                String q1 = "insert into signup2(formno, religion, category, income, education, occupation, pan, aadhar, scitizen, eaccount) values('"+formno+"','"+religion+"','"+category+"','"+income+"','"+education+"','"+occupation+"','"+pan+"','"+aadhar+"','"+scitizen+"','"+eaccount+"')";
                 c1.s.executeUpdate(q1);
                 
                 new Signup3(formno).setVisible(true);

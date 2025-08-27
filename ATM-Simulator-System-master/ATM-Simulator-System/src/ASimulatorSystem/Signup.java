@@ -3,7 +3,8 @@ package ASimulatorSystem;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.prefs.Preferences;
 import com.toedter.calendar.JDateChooser;
 import java.util.*;
 
@@ -227,22 +228,34 @@ public class Signup extends JFrame implements ActionListener{
         setSize(850,800);
         setLocation(500,120);
         setVisible(true);
+
+        // Load any previously saved form state
+        loadFormState();
+
+        // Save form state when window is closing
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                saveFormState();
+            }
+        });
     }
     
     public void actionPerformed(ActionEvent ae){
-        
         String formno = first;
-        String name = t1.getText();
-        String fname = t2.getText();
-        String dob = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
+        String name = t1.getText().trim();
+        String fname = t2.getText().trim();
+        java.util.Date selectedDate = dateChooser.getDate();
+        String dob = null;
+        if (selectedDate != null) {
+            dob = new SimpleDateFormat("yyyy-MM-dd").format(selectedDate);
+        }
         String gender = null;
         if(r1.isSelected()){ 
             gender = "Male";
         }else if(r2.isSelected()){ 
             gender = "Female";
         }
-            
-        String email = t3.getText();
+        String email = t3.getText().trim();
         String marital = null;
         if(r3.isSelected()){ 
             marital = "Married";
@@ -251,30 +264,94 @@ public class Signup extends JFrame implements ActionListener{
         }else if(r5.isSelected()){ 
             marital = "Other";
         }
-           
-        String address = t4.getText();
-        String city = t5.getText();
-        String pincode = t6.getText();
-        String state = t7.getText();
-        
+        String address = t4.getText().trim();
+        String city = t5.getText().trim();
+        String pincode = t6.getText().trim();
+        String state = t7.getText().trim();
+
+        // Basic validation for required fields
+        if (name.isEmpty() || fname.isEmpty() || dob == null || gender == null ||
+            email.isEmpty() || marital == null || address.isEmpty() || city.isEmpty() ||
+            pincode.isEmpty() || state.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Fill all the required fields");
+            return;
+        }
 
         try{
-           
-            if(t6.getText().equals("")){
-                JOptionPane.showMessageDialog(null, "Fill all the required fields");
-            }else{
-                Conn c1 = new Conn();
-                String q1 = "insert into signup values('"+formno+"','"+name+"','"+fname+"','"+dob+"','"+gender+"','"+email+"','"+marital+"','"+address+"','"+city+"','"+pincode+"','"+state+"')";
-                c1.s.executeUpdate(q1);
-                
-                new Signup2(first).setVisible(true);
-                setVisible(false);
+            Conn c1 = new Conn();
+            // Try a few common schemas for signup table
+            boolean inserted = false;
+            String[] queries = new String[] {
+                // 1) Our current schema (pin column)
+                "insert into signup(formno, name, fname, dob, gender, email, marital, address, city, state, pin) values('"+formno+"','"+name+"','"+fname+"','"+dob+"','"+gender+"','"+email+"','"+marital+"','"+address+"','"+city+"','"+state+"','"+pincode+"')",
+                // 2) Alternative uses pincode
+                "insert into signup(formno, name, fname, dob, gender, email, marital, address, city, state, pincode) values('"+formno+"','"+name+"','"+fname+"','"+dob+"','"+gender+"','"+email+"','"+marital+"','"+address+"','"+city+"','"+state+"','"+pincode+"')",
+                // 3) Original tutorial schema
+                "insert into signup(form_no, name, father_name, dob, gender, email, marital_status, address, city, state, pin_code) values('"+formno+"','"+name+"','"+fname+"','"+dob+"','"+gender+"','"+email+"','"+marital+"','"+address+"','"+city+"','"+state+"','"+pincode+"')"
+            };
+            for (String qTry : queries) {
+                try {
+                    c1.s.executeUpdate(qTry);
+                    inserted = true;
+                    break;
+                } catch (Exception ignore) {
+                    // try next shape
+                }
             }
-            
+            if (!inserted) throw new RuntimeException("Could not insert into signup table with any known schema.");
+
+            // Clear saved state after successful move to next page
+            clearSavedFormState();
+            new Signup2(first).setVisible(true);
+            setVisible(false);
         }catch(Exception e){
-             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Unable to proceed: " + e.getMessage());
+            // Persist current state on failure so user can retry later
+            saveFormState();
         }
-        
+    }
+
+    private void saveFormState(){
+        Preferences prefs = Preferences.userNodeForPackage(Signup.class);
+        prefs.put("name", t1.getText());
+        prefs.put("fname", t2.getText());
+        java.util.Date d = dateChooser.getDate();
+        prefs.putLong("dobMillis", d != null ? d.getTime() : -1L);
+        prefs.put("gender", r1.isSelected() ? "Male" : (r2.isSelected() ? "Female" : ""));
+        prefs.put("email", t3.getText());
+        String maritalSel = r3.isSelected() ? "Married" : (r4.isSelected() ? "Unmarried" : (r5.isSelected() ? "Other" : ""));
+        prefs.put("marital", maritalSel);
+        prefs.put("address", t4.getText());
+        prefs.put("city", t5.getText());
+        prefs.put("pincode", t6.getText());
+        prefs.put("state", t7.getText());
+    }
+
+    private void loadFormState(){
+        Preferences prefs = Preferences.userNodeForPackage(Signup.class);
+        t1.setText(prefs.get("name", ""));
+        t2.setText(prefs.get("fname", ""));
+        long millis = prefs.getLong("dobMillis", -1L);
+        if (millis > 0) {
+            dateChooser.setDate(new java.util.Date(millis));
+        }
+        String genderSaved = prefs.get("gender", "");
+        if ("Male".equals(genderSaved)) r1.setSelected(true);
+        if ("Female".equals(genderSaved)) r2.setSelected(true);
+        t3.setText(prefs.get("email", ""));
+        String maritalSaved = prefs.get("marital", "");
+        if ("Married".equals(maritalSaved)) r3.setSelected(true);
+        if ("Unmarried".equals(maritalSaved)) r4.setSelected(true);
+        if ("Other".equals(maritalSaved)) r5.setSelected(true);
+        t4.setText(prefs.get("address", ""));
+        t5.setText(prefs.get("city", ""));
+        t6.setText(prefs.get("pincode", ""));
+        t7.setText(prefs.get("state", ""));
+    }
+
+    private void clearSavedFormState(){
+        Preferences prefs = Preferences.userNodeForPackage(Signup.class);
+        try { prefs.clear(); } catch (Exception ignore) {}
     }
     
     

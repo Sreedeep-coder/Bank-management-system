@@ -1,9 +1,8 @@
 package ASimulatorSystem;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.sql.*;
+import java.sql.ResultSet;
 
 public class Login extends JFrame implements ActionListener{
     JLabel l1,l2,l3;
@@ -13,13 +12,17 @@ public class Login extends JFrame implements ActionListener{
   
     Login(){
         setTitle("AUTOMATED TELLER MACHINE");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("ASimulatorSystem/icons/logo.jpg"));
-        Image i2 = i1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
-        ImageIcon i3 = new ImageIcon(i2);
-        JLabel l11 = new JLabel(i3);
-        l11.setBounds(70, 10, 100, 100);
-        add(l11);
+        java.net.URL logoUrl = getClass().getClassLoader().getResource("ASimulatorSystem/icons/logo.jpg");
+        if (logoUrl != null) {
+            ImageIcon i1 = new ImageIcon(logoUrl);
+            Image i2 = i1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+            ImageIcon i3 = new ImageIcon(i2);
+            JLabel l11 = new JLabel(i3);
+            l11.setBounds(70, 10, 100, 100);
+            add(l11);
+        }
         
         l1 = new JLabel("WELCOME TO ATM");
         l1.setFont(new Font("Osward", Font.BOLD, 38));
@@ -88,7 +91,7 @@ public class Login extends JFrame implements ActionListener{
             if(ae.getSource()==b1){
                 Conn c1 = new Conn();
                 String cardno  = tf1.getText();
-                String pin  = pf2.getText();
+                String pin  = new String(pf2.getPassword());
                 String q  = "select * from login where cardno = '"+cardno+"' and pin = '"+pin+"'";
 
                 ResultSet rs = c1.s.executeQuery(q);

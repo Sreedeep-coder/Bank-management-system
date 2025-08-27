@@ -4,7 +4,6 @@ package ASimulatorSystem;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.sql.*;
 
 public class Pin extends JFrame implements ActionListener{
     
@@ -77,8 +76,8 @@ public class Pin extends JFrame implements ActionListener{
     
     public void actionPerformed(ActionEvent ae){
         try{        
-            String npin = t1.getText();
-            String rpin = t2.getText();
+            String npin = new String(t1.getPassword());
+            String rpin = new String(t2.getPassword());
             
             if(!npin.equals(rpin)){
                 JOptionPane.showMessageDialog(null, "Entered PIN does not match");
@@ -86,10 +85,10 @@ public class Pin extends JFrame implements ActionListener{
             }
             
             if(ae.getSource()==b1){
-                if (t1.getText().equals("")){
+                if (new String(t1.getPassword()).equals("")){
                     JOptionPane.showMessageDialog(null, "Enter New PIN");
                 }
-                if (t2.getText().equals("")){
+                if (new String(t2.getPassword()).equals("")){
                     JOptionPane.showMessageDialog(null, "Re-Enter new PIN");
                 }
                 
