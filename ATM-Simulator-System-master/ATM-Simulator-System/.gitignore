@@ -1,0 +1,27 @@
+# Build outputs
+/build/
+/dist/
+/out/
+/target/
+/bin/
+
+# NetBeans
+/nbproject/private/
+
+# IDE metadata
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local env files
+.env
+
+# Logs
+*.log
+
