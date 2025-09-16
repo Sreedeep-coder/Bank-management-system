@@ -3,7 +3,7 @@
 
 📌 Project Overview
 
-This project is a **Java-based ATM Simulator / Banking Management System** that provides basic banking operations through a simple interface. It mimics the functionality of a real ATM machine, allowing users to perform essential transactions securely.
+This project is a Java-based ATM Simulator / Banking Management System that provides basic banking operations through a simple interface. It mimics the functionality of a real ATM machine, allowing users to perform essential transactions securely.
 
  ✨ Features
 
@@ -25,7 +25,7 @@ Libraries Used: JCalendar (for date picker in forms)
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/ATM-Simulator-System.git
+   git clone https://github.com/Sreedeep-coder/Bank-management-system.git
    ```
 2. Open the project in your preferred IDE.
 3. Add the required JAR file:
