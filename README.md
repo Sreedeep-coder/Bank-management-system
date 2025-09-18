@@ -36,12 +36,13 @@ Libraries Used: JCalendar (for date picker in forms)
 
 📸 Screenshots 
 
-
-<img width="980" height="591" alt="image" src="https://github.com/user-attachments/assets/147190e9-b9c9-4092-b5a5-7fa758bbc449" />
+<img width="984" height="586" alt="image" src="https://github.com/user-attachments/assets/ab8bddfb-998b-4d6e-8c6d-d118cabdd17d" />
 <img width="1054" height="1001" alt="image" src="https://github.com/user-attachments/assets/b4403ae0-9e4f-4033-a00c-6d640c144dfd" />
 <img width="1041" height="918" alt="image" src="https://github.com/user-attachments/assets/55647a07-24f1-47c5-b4a6-8fe6f64fce19" />
 <img width="1037" height="981" alt="image" src="https://github.com/user-attachments/assets/3875d5f9-d882-4ab3-b126-1c274bad97e1" />
 <img width="1202" height="1079" alt="image" src="https://github.com/user-attachments/assets/65e86afb-d419-4a5c-a5a5-b3b069ddb25b" />
+<img width="984" height="586" alt="image" src="https://github.com/user-attachments/assets/ab8bddfb-998b-4d6e-8c6d-d118cabdd17d" />
+
 
 
 📈 Future Improvements
